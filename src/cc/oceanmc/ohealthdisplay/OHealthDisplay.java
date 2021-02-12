@@ -28,6 +28,7 @@ public final class OHealthDisplay extends JavaPlugin {
         bars = new HashMap<>();
         entities = LinkedHashMultimap.create();
         cds = new HashMap<>();
+        this.getServer().getPluginManager().registerEvents(new EntityListener(), this);
         task = new BukkitRunnable() {
             @Override
             public void run() {
@@ -44,7 +45,6 @@ public final class OHealthDisplay extends JavaPlugin {
                 }
             }
         }.runTaskTimerAsynchronously(this, 20L, 20L);
-
     }
 
     public static OHealthDisplay getInstance() {

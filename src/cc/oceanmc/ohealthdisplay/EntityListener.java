@@ -13,6 +13,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 
 public final class EntityListener implements Listener {
 
@@ -36,6 +38,33 @@ public final class EntityListener implements Listener {
             OHealthDisplay.getBars().put(livingEntity, bossBar);
             Cooldown cd = new Cooldown(5);
             OHealthDisplay.getCds().put(livingEntity, cd);
+        }
+    }
+
+    @EventHandler
+    public void onEntityDamaged(EntityDamageEvent e) {
+        if (OHealthDisplay.getEntities().size() > 0) {
+            if (OHealthDisplay.getEntities().containsValue(e.getEntity()) && e.getEntity() instanceof LivingEntity) {
+                LivingEntity livingEntity = (LivingEntity) e.getEntity();
+                OHealthDisplay.getBars().get(e.getEntity()).setProgress(livingEntity.getHealth() / livingEntity.getMaxHealth());
+            }
+        }
+    }
+
+    @EventHandler
+    public void onEntityDead(EntityDeathEvent e) {
+        if (OHealthDisplay.getEntities().size() > 0) {
+            if (OHealthDisplay.getEntities().containsValue(e.getEntity())) {
+                for (Player player : OHealthDisplay.getEntities().keySet()) {
+                    for (Entity entity : OHealthDisplay.getEntities().get(player)) {
+                        if (e.getEntity() == entity) {
+                            OHealthDisplay.getEntities().get(player).remove(entity);
+                            OHealthDisplay.getBars().remove(entity).removePlayer(player);
+                            OHealthDisplay.getCds().remove(entity).stop();
+                        }
+                    }
+                }
+            }
         }
     }
 
