@@ -35,10 +35,13 @@ public final class OHealthDisplay extends JavaPlugin {
                 if (entities.size() > 0) {
                     for (Player player : entities.keySet()) {
                         for (Entity entity : entities.get(player)) {
-                            if (cds.get(entity).isEnd()) {
-                                bars.get(entity).removePlayer(player);
-                                bars.remove(entity);
-                                cds.remove(entity);
+                            if (cds.containsKey(entity)) {
+                                if (cds.get(entity).isEnd()) {
+                                    bars.get(entity).removePlayer(player);
+                                    bars.remove(entity);
+                                    cds.remove(entity);
+                                    entities.get(player).remove(entity);
+                                }
                             }
                         }
                     }

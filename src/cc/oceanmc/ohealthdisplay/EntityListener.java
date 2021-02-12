@@ -37,6 +37,7 @@ public final class EntityListener implements Listener {
             OHealthDisplay.getEntities().put(player, livingEntity);
             OHealthDisplay.getBars().put(livingEntity, bossBar);
             Cooldown cd = new Cooldown(5);
+            cd.start();
             OHealthDisplay.getCds().put(livingEntity, cd);
         }
     }
