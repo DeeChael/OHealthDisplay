@@ -44,19 +44,19 @@ public class Cooldown {
     }
 
     public void stop() {
-        if (isStart && !this.bukkitTask.isCancelled() && this.bukkitTask != null) {
-            this.isStart = false;
+        this.isStart = false;
+        if (this.bukkitTask != null)
             this.bukkitTask.cancel();
-        }
     }
 
     public void reset() {
-        if (bukkitTask != null && !bukkitTask.isCancelled()) {
-            bukkitTask.cancel();
-        }
+        stop();
         this.time = startTime;
         this.bukkitTask = null;
-        this.isStart = false;
+    }
+
+    public void removeOneSecond() {
+        this.time -= 1;
     }
 
     public int getTime() {
